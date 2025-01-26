@@ -208,6 +208,7 @@ int main(){
                     }
                 
                 
+                
                 // Display seat availability
                 displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
                 displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
