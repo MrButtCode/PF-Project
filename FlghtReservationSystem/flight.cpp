@@ -263,6 +263,8 @@ bool bookSeat(char seats[][10], int rows, int cols, const string& className) {
 // Canceling a Seat
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     string bookingID, name, cnic;
+    bool bookingFound = false;
+    
     cout << "Enter your Booking ID: ";
     cin >> bookingID;
     cin.ignore();
@@ -271,14 +273,15 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     cout << "Enter your CNIC number: ";
     getline(cin, cnic);
 
-    ifstream bookingFile("bookings.txt"); // Fixed: Use "bookings.txt"
+    ifstream bookingFile("bookings.txt"); 
     ofstream tempFile("temp.txt");
-    bool bookingFound = false;
+    
 
     if (!bookingFile || !tempFile) {
         cerr << "Error accessing booking file!" << endl;
         return false;
     }
+    system("cls");
 
     string line;
     while (getline(bookingFile, line)) {
@@ -297,7 +300,7 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
             bookingFound = true;
             if (className == bookedClass) {
                 seats[bookedRow - 1][bookedCol - 1] = 'O'; // Mark seat as available
-                cout << "Booking successfully canceled!" << endl;
+                cout << "\n\n\n\t\t\t\t\t\tBooking successfully canceled!" << endl;
             } else {
                 tempFile << line << endl; // Keep the line if the class doesn't match
             }
