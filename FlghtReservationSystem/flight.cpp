@@ -100,36 +100,56 @@ int main() {
         cin >> choice;
 
         switch (choice) {
-        	case 1:
-            	system("cls");
-                displayFlights();
-                break;
+        	case 1:{
+        		system("cls");
+            	try{
+            		displayFlights();
+				}
+				catch (const exception& e){
+					cout << "Error: " << e.what() << endl;
+				}
+				break;
+			}
+                
             case 2: {
+            	
                 // Booking a seat
                 
-                 // Display seat availability
-                displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
-                displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
-                displaySeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", 3, -1);
-                int classChoice;
-                cout << "\nWhich class do you want to book a seat in?" << endl;
-                cout << "1. First Class" << endl;
-                cout << "2. Business Class" << endl;
-                cout << "3. Economy Class" << endl;
-                cout << "\nEnter your choice (1/2/3): ";
-                cin >> classChoice;
-
-                if (classChoice == 1) {
-                    bookSeat(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class");
-                } else if (classChoice == 2) {
-                    bookSeat(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class");
-                } else if (classChoice == 3) {
-                    bookSeat(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class");
-                } else {
-                    cout << "Invalid choice! Please try again." << endl;
+                // Display seat availability
+                try {
+                	displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
+                	displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
+                	displaySeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", 3, -1);
+                	
+                	int classChoice;
+                	cout << "\nWhich class do you want to book a seat in?" << endl;
+                	cout << "1. First Class" << endl;
+                	cout << "2. Business Class" << endl;
+                	cout << "3. Economy Class" << endl;
+                	cout << "\nEnter your choice (1/2/3): ";
+                	cin >> classChoice;
+                	
+                	
+                	if(classChoice == 1){
+                        bookSeat(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class");
+                    } 
+				    else if(classChoice == 2){
+                        bookSeat(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class");
+                    } 
+				    else if(classChoice == 3){
+                        bookSeat(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class");
+                    } 
+				    else{
+                        cout << "Invalid choice! Please try again." << endl;
+                    }
+                } 
+				catch (const exception& e) {
+                    cout << "Error: " << e.what() << endl;
                 }
                 break;
+                
             }
+            
             case 3: {
                 // Canceling a seat
                 
@@ -144,32 +164,44 @@ int main() {
                 cout << "3. Economy Class" << endl;
                 cout << "\nEnter your choice (1/2/3): ";
                 cin >> classChoice;
+                
 
-                if (classChoice == 1) {
+                if(classChoice == 1){
                     cancelSeat(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class");
-                } else if (classChoice == 2) {
+                } 
+				else if(classChoice == 2){
                     cancelSeat(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class");
-                } else if (classChoice == 3) {
+                } 
+				else if(classChoice == 3){
                     cancelSeat(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class");
-                } else {
+                } 
+				else{
                     cout << "Invalid choice! Please try again." << endl;
                 }
                 break;
             }
             case 4:
             	system("cls");
-                adminMenu();
+            	try{
+            		adminMenu();
+				}
+				catch (const exception& e){
+					cout << "Error: " << e.what() << endl;
+				}
+                
                 break;
             
 			
 			case 5:
-                cout << "Exiting the program. Goodbye!" << endl;
+                cout << "Exiting the program. ThankYou for using our Flight Reservation System. Goodbye!" << endl;
                 return 0;
 
             default:
                 cout << "Invalid choice! Please try again." << endl;
         }
-    }
+    
+	}
+
 
     return 0;
 }
@@ -215,48 +247,45 @@ bool bookSeat(char seats[][10], int rows, int cols, const string& className) {
     cout << "\nEnter the row (1-" << rows << ") and column (1-" << cols << ") to book: ";
     cin >> row >> col;
 
-    if (row > 0 && row <= rows && col > 0 && col <= cols) {
-        if (seats[row - 1][col - 1] == 'O') {
-            cin.ignore();
-            cout << "Enter your name: ";
-            getline(cin, name);
-            cout << "Enter your CNIC number: ";
-            getline(cin, cnic);
-            cout << "Enter your contact number: ";
-            getline(cin, contact);
-
-            string bookingID = generateBookingID();
-
-            ofstream bookingFile("bookings.txt", ios::app); // Fixed: Use "bookings.txt"
-            if (!bookingFile) {
-                cerr << "Error: Unable to open booking file." << endl;
-                return false;
-            }
-
-            bookingFile << bookingID << "," << name << "," << cnic << "," << contact
-                << "," << className << "," << row << "," << col << endl;
-
-            bookingFile.close();
-
-            seats[row - 1][col - 1] = 'X';
-            system("cls");
-            displaySeats(seats, rows, cols, className, (className == "First Class") ? 1 : (className == "Business Class") ? 2 : 3, (className == "First Class") ? 2 : (className == "Business Class") ? 4 : -1);
-            cout << "\n\n\n\t\t\t\t\t\tSeat booked successfully in " << className << "!" << endl;
-            cout << "\t\t\t\t\t\tYour Booking ID: " << bookingID << endl;
-            cout << "\t\t\t\t\t\tThank you for booking with us!\n\n\n" << endl;
-            cout << "\n\t\t\t\t\t\tPress any key to continue...";
-            getch();
-            system("cls");
-            return true;
-        } else {
-            cout << "Seat already booked! Please choose another seat." << endl;
-            return false;
-        }
-    } else {
-        cout << "Invalid seat selection. Please try again." << endl;
-        return false;
+    if (row <= 0 || row > rows || col <= 0 || col > cols) {
+        throw out_of_range("Invalid seat selection. Row and column must be within valid range.");
     }
+
+    if (seats[row - 1][col - 1] == 'X'){
+        throw runtime_error("Seat already booked! Please choose another seat.");
+    }
+
+    cin.ignore();
+    cout << "Enter your name: ";
+    getline(cin, name);
+    cout << "Enter your CNIC number: ";
+    getline(cin, cnic);
+    cout << "Enter your contact number: ";
+    getline(cin, contact);
+
+    string bookingID = generateBookingID();
+
+    ofstream bookingFile("bookings.txt", ios::app);
+    if (!bookingFile) {
+        throw runtime_error("Unable to open booking file for writing.");
+    }
+
+    bookingFile << bookingID << "," << name << "," << cnic << "," << contact
+        << "," << className << "," << row << "," << col << endl;
+    bookingFile.close();
+
+    seats[row - 1][col - 1] = 'X';
+
     system("cls");
+    cout << "\n\n\n\t\t\t\t\tSeat booked successfully in " << className << "!" << endl;
+    cout << "\t\t\t\t\tYour Booking ID: " << bookingID << endl;
+    cout << "\t\t\t\t\tThank you for booking with us!\n\n\n" << endl;
+    displaySeats(seats, rows, cols, className, (className == "First Class") ? 1 : (className == "Business Class") ? 2 : 3, (className == "First Class") ? 2 : (className == "Business Class") ? 4 : -1);
+    cout << "\n\t\t\t\t\tPress any key to continue...";
+    getch();
+    system("cls");
+
+    return true;
 }
 
 
@@ -278,7 +307,7 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     
 
     if (!bookingFile || !tempFile) {
-        cerr << "Error accessing booking file!" << endl;
+        cout << "Error accessing booking file!" << endl;
         return false;
     }
     system("cls");
@@ -296,12 +325,13 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
         getline(ss, bookedClass, ',');
         ss >> bookedRow >> bookedCol;
 
-        if (id == bookingID && bookedName == name && bookedCNIC == cnic) {
+        if(id == bookingID && bookedName == name && bookedCNIC == cnic) {
             bookingFound = true;
-            if (className == bookedClass) {
+            if(className == bookedClass) {
                 seats[bookedRow - 1][bookedCol - 1] = 'O'; // Mark seat as available
                 cout << "\n\n\n\t\t\t\t\t\tBooking successfully canceled!" << endl;
-            } else {
+            } 
+			else{
                 tempFile << line << endl; // Keep the line if the class doesn't match
             }
         } else {
@@ -315,7 +345,8 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     if (bookingFound) {
         remove("bookings.txt");
         rename("temp.txt", "bookings.txt");
-    } else {
+    } 
+	else {
         remove("temp.txt");
         cout << "Booking not found or details incorrect!" << endl;
     }
@@ -323,12 +354,11 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     return bookingFound;
 }
 
-// Display flight schedules
+// Display flight schedules	
 void displayFlights() {
     ifstream flightFile("flights.txt");
     if (!flightFile) {
-        cerr << "Error: Unable to open flights file." << endl;
-        return;
+        throw runtime_error("Unable to open flights file.");
     }
 
     cout << "\nAvailable Flights:" << endl;
@@ -339,6 +369,7 @@ void displayFlights() {
 
     flightFile.close();
 }
+
 
 
 // Admin menu to view bookings
@@ -371,9 +402,8 @@ void adminMenu() {
             case 1: {
             	    // Add a new flight
                 ofstream flightFile("flights.txt", ios::app);
-                if (!flightFile) {
-                    cerr << "Error: Unable to open flights file for writing." << endl;
-                    break;
+                if(!flightFile) {
+                    throw runtime_error("Unable to open flights file for writing.");
                 }
 
                 string airline, departure, arrival, dateTime;
@@ -396,15 +426,12 @@ void adminMenu() {
                 // Remove a flight
                 ifstream flightFile("flights.txt");
                 if (!flightFile) {
-                    cerr << "Error: Unable to open flights file for reading." << endl;
-                    break;
+                    throw runtime_error("Unable to create temporary file.");
                 }
 
                 ofstream tempFile("temp.txt");
                 if (!tempFile) {
-                    cerr << "Error: Unable to create temporary file." << endl;
-                    flightFile.close();
-                    break;
+                    throw runtime_error("Unable to create temporary file.");
                 }
 
                 string line, flightToRemove;
@@ -413,10 +440,12 @@ void adminMenu() {
                 getline(cin, flightToRemove);
 
                 bool found = false;
-                while (getline(flightFile, line)) {
+                
+                while(getline(flightFile, line)) {
                     if (line == flightToRemove) {
                         found = true;
-                    } else {
+                    } 
+					else{
                         tempFile << line << endl;
                     }
                 }
@@ -424,7 +453,7 @@ void adminMenu() {
                 flightFile.close();
                 tempFile.close();
 
-                if (found) {
+                if(found) {
                     remove("flights.txt");
                     rename("temp.txt", "flights.txt");
                     cout << "Flight removed successfully!" << endl;
@@ -435,11 +464,10 @@ void adminMenu() {
 
                 break;
             }
-            case 3: {
+            case 3:{
                 ifstream bookingFile("bookings.txt");
-                if (!bookingFile) {
-                    cerr << "Error: Unable to open booking file." << endl;
-                    break;
+                if(!bookingFile) {
+                    throw runtime_error("Unable to open booking file.");
                 }
 
                 cout << "\nBookings List:" << endl;
