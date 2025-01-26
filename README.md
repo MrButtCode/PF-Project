@@ -44,6 +44,14 @@ The program starts with a welcome screen. The main menu provides options for:
 
 Follow the on-screen prompts for each option.
 
+## Key Implementation Detail (2D Arrays):
+
+When passing 2D arrays to functions in C++, the second dimension (number of columns) must be specified in the function declaration and definition. This is why the function signatures use `char seats[][10]`.
+
+## Error Handling
+
+Exceptions (`try-catch`) are used for error handling.
+
 
 ## Author
 Muhammad Hamza Butt
