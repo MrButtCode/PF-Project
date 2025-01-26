@@ -277,11 +277,11 @@ bool bookSeat(char seats[][10], int rows, int cols, const string& className) {
     seats[row - 1][col - 1] = 'X';
 
     system("cls");
-    cout << "\n\n\n\t\t\t\t\tSeat booked successfully in " << className << "!" << endl;
-    cout << "\t\t\t\t\tYour Booking ID: " << bookingID << endl;
-    cout << "\t\t\t\t\tThank you for booking with us!\n\n\n" << endl;
     displaySeats(seats, rows, cols, className, (className == "First Class") ? 1 : (className == "Business Class") ? 2 : 3, (className == "First Class") ? 2 : (className == "Business Class") ? 4 : -1);
-    cout << "\n\t\t\t\t\tPress any key to continue...";
+    cout << "\n\n\n\t\t\t\t\t\tSeat booked successfully in " << className << "!" << endl;
+    cout << "\t\t\t\t\t\tYour Booking ID: " << bookingID << endl;
+    cout << "\t\t\t\t\t\tThank you for booking with us!\n\n\n" << endl;
+    cout << "\n\t\t\t\t\t\tPress any key to continue...";
     getch();
     system("cls");
 
@@ -334,7 +334,8 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
 			else{
                 tempFile << line << endl; // Keep the line if the class doesn't match
             }
-        } else {
+        } 
+		else {
             tempFile << line << endl; // Copy non-matching lines
         }
     }
@@ -350,6 +351,10 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
         remove("temp.txt");
         cout << "Booking not found or details incorrect!" << endl;
     }
+    
+    cout << "\n\n\t\tPress any key to continue...";
+    getch();
+    system("cls");
 
     return bookingFound;
 }
@@ -361,11 +366,15 @@ void displayFlights() {
         throw runtime_error("Unable to open flights file.");
     }
 
-    cout << "\nAvailable Flights:" << endl;
+    cout << "\n\tAvailable Flights:" << endl;
     string line;
     while (getline(flightFile, line)) {
-        cout << line << endl;
+        cout << "\n\t" << line << endl;
     }
+    
+    cout << "\n\n\t\tPress any key to continue...";
+    getch();
+    system("cls");
 
     flightFile.close();
 }
@@ -466,6 +475,7 @@ void adminMenu() {
             }
             case 3:{
                 ifstream bookingFile("bookings.txt");
+                
                 if(!bookingFile) {
                     throw runtime_error("Unable to open booking file.");
                 }
