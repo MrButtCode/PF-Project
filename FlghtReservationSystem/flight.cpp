@@ -1,7 +1,9 @@
 #include <iostream>
 #include <iomanip>
 #include<conio.h>
+#include <fstream>
 #include<windows.h>
+#include <string>
 using namespace std;
 
 
@@ -23,8 +25,8 @@ void login()
 	cout << "\t\t\t\t\t|                                                                                       |\n";
 	cout << "\t\t\t\t\t|                                                                                       |\n";
 	cout << "\t\t\t\t\t|                                                                                       |\n";
-	cout << "\t\t\t\t\t|                                                                                       |\n";
-	cout << "\t\t\t\t\t|                                                                                       |\n";
+	cout << "\t\t\t\t\t|                                                          Made  By                     |\n";
+	cout << "\t\t\t\t\t|                                                    Muhammad Hamza Butt                |\n";
 	cout << "\t\t\t\t\t|_______________________________________________________________________________________|\n";
 	cout << "\t\t\t\t\tPress any key to continue...";
 	getch();
@@ -55,6 +57,8 @@ void initializeSeats(char seats[][10], int rows, int cols);
 void displaySeats(char seats[][10], int rows, int cols, const string &className, int aislePos1, int aislePos2);
 bool bookSeat(char seats[][10], int rows, int cols, const string &className);
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className);
+void displayFlights();
+void adminMenu();;
 
 
 
@@ -79,22 +83,29 @@ int main() {
 
     int choice;
     while (true) {
-        // Display seat availability
-        displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
-        displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
-        displaySeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", 3, -1);
 
         // Prompt user for action
         cout << "\nWhat would you like to do?" << endl;
-        cout << "1. Book a seat" << endl;
-        cout << "2. Cancel a seat" << endl;
-        cout << "3. Exit" << endl;
-        cout << "\n Enter your choice (1/2/3): ";
+        cout << "1. View Flight Schedules" << endl;
+        cout << "2. Book a Seat" << endl;
+        cout << "3. Cancel a Seat" << endl;
+        cout << "4. Admin Menu" << endl;
+        cout << "5. Exit" << endl;
+        cout << "\nEnter your choice (1-5): ";
         cin >> choice;
 
         switch (choice) {
-            case 1: {
+        	case 1:
+            	system("cls");
+                displayFlights();
+                break;
+            case 2: {
                 // Booking a seat
+                
+                 // Display seat availability
+                displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
+                displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
+                displaySeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", 3, -1);
                 int classChoice;
                 cout << "\nWhich class do you want to book a seat in?" << endl;
                 cout << "1. First Class" << endl;
@@ -114,8 +125,13 @@ int main() {
                 }
                 break;
             }
-            case 2: {
+            case 3: {
                 // Canceling a seat
+                
+                // Display seat availability
+                displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
+                displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
+                displaySeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", 3, -1);
                 int classChoice;
                 cout << "\nWhich class do you want to cancel a seat in?" << endl;
                 cout << "1. First Class" << endl;
@@ -135,7 +151,13 @@ int main() {
                 }
                 break;
             }
-            case 3:
+            case 4:
+            	system("cls");
+                adminMenu();
+                break;
+            
+			
+			case 5:
                 cout << "Exiting the program. Goodbye!" << endl;
                 return 0;
 
@@ -212,4 +234,125 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
         return false;
     }
 }
+
+// Display flight schedules
+void displayFlights() {
+    ifstream flightFile("flights.txt");
+    if (!flightFile) {
+        cerr << "Error: Unable to open flights file." << endl;
+        return;
+    }
+
+    cout << "\nAvailable Flights:" << endl;
+    string line;
+    while (getline(flightFile, line)) {
+        cout << line << endl;
+    }
+
+    flightFile.close();
+}
+
+
+// Admin menu for managing flights
+void adminMenu() {
+    const string ADMIN_USERNAME = "admin123";
+    const string ADMIN_PASSWORD = "password456";
+
+    string username, password;
+    cout << "\nEnter admin username: ";
+    cin >> username;
+    cout << "Enter admin password: ";
+    cin >> password;
+
+    if (username != ADMIN_USERNAME || password != ADMIN_PASSWORD) {
+        cout << "\nInvalid credentials! Returning to main menu." << endl;
+        return;
+    }
+    int adminChoice;
+    while (true) {
+        cout << "\nAdmin Menu:" << endl;
+        cout << "1. Add Flight" << endl;
+        cout << "2. Remove Flight" << endl;
+        cout << "3. Back to Main Menu" << endl;
+        cout << "\nEnter your choice (1-3): ";
+        cin >> adminChoice;
+
+        switch (adminChoice) {
+            case 1: {
+            	    // Add a new flight
+                ofstream flightFile("flights.txt", ios::app);
+                if (!flightFile) {
+                    cerr << "Error: Unable to open flights file for writing." << endl;
+                    break;
+                }
+
+                string airline, departure, arrival, dateTime;
+                cout << "\nEnter Airline: ";
+                cin.ignore();
+                getline(cin, airline);
+                cout << "Enter Departure Airport: ";
+                getline(cin, departure);
+                cout << "Enter Arrival Airport: ";
+                getline(cin, arrival);
+                cout << "Enter Date and Time (DD-MM-YYYY HH:MM): ";
+                getline(cin, dateTime);
+
+                flightFile << airline << ", " << departure << " -> " << arrival << ", " << dateTime << endl;
+                cout << "Flight added successfully!" << endl;
+
+                flightFile.close();
+                break;
+            }
+            case 2: {
+                // Remove a flight
+                ifstream flightFile("flights.txt");
+                if (!flightFile) {
+                    cerr << "Error: Unable to open flights file for reading." << endl;
+                    break;
+                }
+
+                ofstream tempFile("temp.txt");
+                if (!tempFile) {
+                    cerr << "Error: Unable to create temporary file." << endl;
+                    flightFile.close();
+                    break;
+                }
+
+                string line, flightToRemove;
+                cout << "\nEnter details of the flight to remove (exact match required): ";
+                cin.ignore();
+                getline(cin, flightToRemove);
+
+                bool found = false;
+                while (getline(flightFile, line)) {
+                    if (line == flightToRemove) {
+                        found = true;
+                    } else {
+                        tempFile << line << endl;
+                    }
+                }
+
+                flightFile.close();
+                tempFile.close();
+
+                if (found) {
+                    remove("flights.txt");
+                    rename("temp.txt", "flights.txt");
+                    cout << "Flight removed successfully!" << endl;
+                } else {
+                    remove("temp.txt");
+                    cout << "Flight not found!" << endl;
+                }
+
+                break;
+            }
+            case 3:
+                cout << "Returning to main menu." << endl;
+                return;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    }
+}
+
 
