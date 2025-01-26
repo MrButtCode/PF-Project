@@ -6,7 +6,6 @@
 #include <string>
 #include <ctime>  // For generating unique booking IDs
 #include <sstream> // For converting data to strings
-#include <vector> // Include for std::vector
 #include <stdexcept> // Include for exceptions
 using namespace std;
 
@@ -69,11 +68,11 @@ string generateBookingID(); // Declare generateBookingID
 
 
 
-int main() {
+int main(){
 	
 	system("color 71");
 	
-    // Seat grids for each class
+    // Seats for each class
     char firstClassSeats[FIRST_ROWS][10];    
     char businessClassSeats[BUSINESS_ROWS][10];
     char economyClassSeats[ECONOMY_ROWS][10]; 
@@ -99,7 +98,7 @@ int main() {
         cout << "\nEnter your choice (1-5): ";
         cin >> choice;
 
-        switch (choice) {
+        switch(choice){
         	case 1:{
         		system("cls");
             	try{
@@ -111,12 +110,12 @@ int main() {
 				break;
 			}
                 
-            case 2: {
+            case 2:{
             	
                 // Booking a seat
                 
                 // Display seat availability
-                try {
+                try{
                 	
                 	system("cls");
                 	displayFlights();
@@ -178,7 +177,7 @@ int main() {
                 
             }
             
-            case 3: {
+            case 3:{
                 // Canceling a seat
                 
                 system("cls");
@@ -199,9 +198,9 @@ int main() {
                         numFlights++;
                     flightFile.close();
 
-                    if (flightIndex > numFlights) {
+                    if (flightIndex > numFlights){
                     	
-                        cout << "\n\tInvalid flight index. There are only " << numFlights << " flight(s) available." << endl; // Use cout
+                        cout << "\n\tInvalid flight index. There are only " << numFlights << " flight(s) available." << endl; 
                         cout << "\n\t\t\t\t\tPress any key to continue...";
                         getch();
                         system("cls");
@@ -272,7 +271,7 @@ void seats(char seats[][10], int rows, int cols) {
 }
 
 // Seats display
-void displaySeats(char seats[][10], int rows, int cols, const string &className, int aislePos1, int aislePos2) {
+void displaySeats(char seats[][10], int rows, int cols, const string &className, int aislePos1, int aislePos2){
     cout << "\n\n\n\n\t\t\t\t\t\t\t\t";
     cout << className << "\n"<<  endl;
     for (int i = 0; i < rows; ++i) {
@@ -287,7 +286,7 @@ void displaySeats(char seats[][10], int rows, int cols, const string &className,
 }
 
 // Function to generate a unique booking ID
-string generateBookingID() {
+string generateBookingID(){
     srand(time(0));
     int randomID = rand() % 100000;  // Generates a 5-digit random number
     stringstream ss;
@@ -297,7 +296,7 @@ string generateBookingID() {
 
 
 // Booking a Seat
-bool bookSeat(char seats[][10], int rows, int cols, const string& className, int flightIndex) {
+bool bookSeat(char seats[][10], int rows, int cols, const string& className, int flightIndex){
     int row, col;
     string name, cnic, contact;
     cout << "\nEnter the row (1-" << rows << ") and column (1-" << cols << ") to book: ";
