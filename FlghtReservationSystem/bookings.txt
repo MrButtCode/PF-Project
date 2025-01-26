@@ -1,3 +1,4 @@
 BK21936,Hamza,31521,2131,First Class,1,2
 BK22729,Hamid,546,116,First Class,2,3
 BK21895,Ali,652,5626,Economy Class,2,5,1
+BK26862,Rafay,5641,6152,Business Class,2,2,1

@@ -57,7 +57,7 @@ const int ECONOMY_ROWS = 10, ECONOMY_COLS = 6;
 
 
 // Function declarations
-void initializeSeats(char seats[][10], int rows, int cols);
+void seats(char seats[][10], int rows, int cols);
 void displaySeats(char seats[][10], int rows, int cols, const string &className, int aislePos1, int aislePos2);
 bool bookSeat(char seats[][10], int rows, int cols, const string &className, int flightIndex);
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className);
@@ -82,9 +82,9 @@ int main() {
 	system("cls");
 
     // Initialize seats to available ('O')
-    initializeSeats(firstClassSeats, FIRST_ROWS, FIRST_COLS);
-    initializeSeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS);
-    initializeSeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS);
+    seats(firstClassSeats, FIRST_ROWS, FIRST_COLS);
+    seats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS);
+    seats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS);
 
     int choice;
     do{
@@ -128,6 +128,22 @@ int main() {
                     if (cin.fail() || flightIndex <= 0) {
                         throw runtime_error("Invalid flight index input.");
                     }
+                    
+                    ifstream flightFile("flights.txt");
+                    int numFlights = 0;
+                    string line;
+                    while(getline(flightFile, line))
+                        numFlights++;
+                    flightFile.close();
+
+                    if (flightIndex > numFlights) {
+                    	
+                        cout << "\n\tInvalid flight index. There are only " << numFlights << " flight(s) available." << endl; // Use cout
+                        cout << "\n\t\t\t\t\tPress any key to continue...";
+                        getch();
+                        system("cls");
+                        break;
+                    }
 
                 	displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
                 	displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
@@ -167,6 +183,30 @@ int main() {
                 
                 system("cls");
                 displayFlights();
+                
+                int flightIndex;
+                    cout << "\nEnter the Flight Number you want to book (enter index): ";
+                    cin >> flightIndex;
+
+                    if (cin.fail() || flightIndex <= 0) {
+                        throw runtime_error("Invalid flight index input.");
+                    }
+                    
+                    ifstream flightFile("flights.txt");
+                    int numFlights = 0;
+                    string line;
+                    while(getline(flightFile, line))
+                        numFlights++;
+                    flightFile.close();
+
+                    if (flightIndex > numFlights) {
+                    	
+                        cout << "\n\tInvalid flight index. There are only " << numFlights << " flight(s) available." << endl; // Use cout
+                        cout << "\n\t\t\t\t\tPress any key to continue...";
+                        getch();
+                        system("cls");
+                        break;
+                    }
                 
                 
                 // Display seat availability
@@ -223,7 +263,7 @@ int main() {
 }
 
 // Initialize seats to 'O' (available)
-void initializeSeats(char seats[][10], int rows, int cols) {
+void seats(char seats[][10], int rows, int cols) {
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
             seats[i][j] = 'O';
@@ -238,7 +278,7 @@ void displaySeats(char seats[][10], int rows, int cols, const string &className,
     for (int i = 0; i < rows; ++i) {
         cout << "\t\t\t\t\t\t\t";
         cout << "Row " << setw(2) << i + 1 << ":   ";
-        for (int j = 0; j < cols; ++j) {
+        for (int j = 0; j < cols; ++j) {	
             if (j == aislePos1 || j == aislePos2) cout << "| "; // Add aisle
             cout << seats[i][j] << " ";
         }
