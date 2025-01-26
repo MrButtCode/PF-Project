@@ -59,7 +59,7 @@ const int ECONOMY_ROWS = 10, ECONOMY_COLS = 6;
 // Function declarations
 void initializeSeats(char seats[][10], int rows, int cols);
 void displaySeats(char seats[][10], int rows, int cols, const string &className, int aislePos1, int aislePos2);
-bool bookSeat(char seats[][10], int rows, int cols, const string &className);
+bool bookSeat(char seats[][10], int rows, int cols, const string &className, int flightIndex);
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className);
 void displayFlights();
 void adminMenu();
@@ -87,7 +87,7 @@ int main() {
     initializeSeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS);
 
     int choice;
-    while (true) {
+    do{
 
         // Prompt user for action
         cout << "\nWhat would you like to do?" << endl;
@@ -117,6 +117,18 @@ int main() {
                 
                 // Display seat availability
                 try {
+                	
+                	system("cls");
+                	displayFlights();
+                	
+                	int flightIndex;
+                    cout << "\nEnter the Flight Number you want to book (enter index): ";
+                    cin >> flightIndex;
+
+                    if (cin.fail() || flightIndex <= 0) {
+                        throw runtime_error("Invalid flight index input.");
+                    }
+
                 	displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
                 	displaySeats(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", 2, 4);
                 	displaySeats(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", 3, -1);
@@ -131,13 +143,13 @@ int main() {
                 	
                 	
                 	if(classChoice == 1){
-                        bookSeat(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class");
+                        bookSeat(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", flightIndex);
                     } 
 				    else if(classChoice == 2){
-                        bookSeat(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class");
+                        bookSeat(businessClassSeats, BUSINESS_ROWS, BUSINESS_COLS, "Business Class", flightIndex);
                     } 
 				    else if(classChoice == 3){
-                        bookSeat(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class");
+                        bookSeat(economyClassSeats, ECONOMY_ROWS, ECONOMY_COLS, "Economy Class", flightIndex);
                     } 
 				    else{
                         cout << "Invalid choice! Please try again." << endl;
@@ -146,12 +158,16 @@ int main() {
 				catch (const exception& e) {
                     cout << "Error: " << e.what() << endl;
                 }
-                break;
+                break;	
                 
             }
             
             case 3: {
                 // Canceling a seat
+                
+                system("cls");
+                displayFlights();
+                
                 
                 // Display seat availability
                 displaySeats(firstClassSeats, FIRST_ROWS, FIRST_COLS, "First Class", 1, 2);
@@ -200,7 +216,7 @@ int main() {
                 cout << "Invalid choice! Please try again." << endl;
         }
     
-	}
+	}while(choice!=5);
 
 
     return 0;
@@ -241,7 +257,7 @@ string generateBookingID() {
 
 
 // Booking a Seat
-bool bookSeat(char seats[][10], int rows, int cols, const string& className) {
+bool bookSeat(char seats[][10], int rows, int cols, const string& className, int flightIndex) {
     int row, col;
     string name, cnic, contact;
     cout << "\nEnter the row (1-" << rows << ") and column (1-" << cols << ") to book: ";
@@ -271,7 +287,7 @@ bool bookSeat(char seats[][10], int rows, int cols, const string& className) {
     }
 
     bookingFile << bookingID << "," << name << "," << cnic << "," << contact
-        << "," << className << "," << row << "," << col << endl;
+        << "," << className << "," << row << "," << col << "," << flightIndex << endl;
     bookingFile.close();
 
     seats[row - 1][col - 1] = 'X';
@@ -292,11 +308,13 @@ bool bookSeat(char seats[][10], int rows, int cols, const string& className) {
 // Canceling a Seat
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     string bookingID, name, cnic;
+    int flightIndexToCancel;
     bool bookingFound = false;
     
     cout << "Enter your Booking ID: ";
     cin >> bookingID;
-    cin.ignore();
+    cout << "Enter the Flight Index of the booking to cancel: "; 
+    cin >> flightIndexToCancel;
     cout << "Enter your name: ";
     getline(cin, name);
     cout << "Enter your CNIC number: ";
@@ -316,16 +334,16 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     while (getline(bookingFile, line)) {
         stringstream ss(line);
         string id, bookedName, bookedCNIC, contact, bookedClass;
-        int bookedRow, bookedCol;
+        int bookedRow, bookedCol, bookedFlightIndex;
 
         getline(ss, id, ',');
         getline(ss, bookedName, ',');
         getline(ss, bookedCNIC, ',');
         getline(ss, contact, ',');
         getline(ss, bookedClass, ',');
-        ss >> bookedRow >> bookedCol;
+        ss >> flightIndexToCancel >> bookedRow >> bookedCol;
 
-        if(id == bookingID && bookedName == name && bookedCNIC == cnic) {
+        if (id == bookingID && bookedName == name && bookedCNIC == cnic && bookedClass == className && bookedFlightIndex == flightIndexToCancel){
             bookingFound = true;
             if(className == bookedClass) {
                 seats[bookedRow - 1][bookedCol - 1] = 'O'; // Mark seat as available
@@ -367,14 +385,17 @@ void displayFlights() {
     }
 
     cout << "\n\tAvailable Flights:" << endl;
+    cout << "\n\t   Airline\tDeparture -> Arrival\tDate Time" << endl;
+     cout << "\t----------------------------------------------------------------------" << endl;
+
     string line;
+    int flightNumber = 1; 
     while (getline(flightFile, line)) {
-        cout << "\n\t" << line << endl;
+        cout << "\t" << flightNumber << ".  ";
+        cout << line << endl;
+        flightNumber++; 
     }
     
-    cout << "\n\n\t\tPress any key to continue...";
-    getch();
-    system("cls");
 
     flightFile.close();
 }
@@ -425,7 +446,7 @@ void adminMenu() {
                 cout << "Enter Date and Time (DD-MM-YYYY HH:MM): ";
                 getline(cin, dateTime);
 
-                flightFile << airline << ", " << departure << " -> " << arrival << ", " << dateTime << endl;
+                flightFile << airline << ",\t" << departure << " -> " << arrival << ",\t" << dateTime << endl;
                 cout << "Flight added successfully!" << endl;
 
                 flightFile.close();
