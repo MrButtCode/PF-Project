@@ -1,1 +1,4 @@
-Emirates, Dubai -> Pakistan, 25-05-2025 18:56
+Emirates,  Dubai -> Pakistan,   25-05-2025 18:56
+PIA,	Karachi -> Doha,   25-08-2025
+ETIHAD,	Islamabad -> Sharjah, 25-01-2025 22:56		
+FlyJinnah,	Karachi -> Seattle,	26-02-2025 14:00

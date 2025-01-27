@@ -61,7 +61,7 @@ void displaySeats(char seats[][10], int rows, int cols, const string &className,
 bool bookSeat(char seats[][10], int rows, int cols, const string &className, int flightIndex);
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className);
 void displayFlights();
-void adminMenu();
+void admin();
 string generateBookingID(); // Declare generateBookingID
 
 
@@ -239,7 +239,7 @@ int main(){
             case 4:
             	system("cls");
             	try{
-            		adminMenu();
+            		admin();
 				}
 				catch (const exception& e){
 					cout << "Error: " << e.what() << endl;
@@ -418,14 +418,14 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
 }
 
 // Display flight schedules	
-void displayFlights() {
+void displayFlights(){
     ifstream flightFile("flights.txt");
     if (!flightFile) {
         throw runtime_error("Unable to open flights file.");
     }
 
     cout << "\n\tAvailable Flights:" << endl;
-    cout << "\n\t   Airline\tDeparture -> Arrival\tDate Time" << endl;
+    cout << "\n\t   Airline\tDeparture -> Arrival\tDate\tTime" << endl;
      cout << "\t----------------------------------------------------------------------" << endl;
 
     string line;
@@ -443,7 +443,7 @@ void displayFlights() {
 
 
 // Admin menu to view bookings
-void adminMenu() {
+void admin() {
     const string ADMIN_USERNAME = "admin123";
     const string ADMIN_PASSWORD = "password456";
 
@@ -459,7 +459,7 @@ void adminMenu() {
     }
 
     int adminChoice;
-    while (true) {
+    while(true){
         cout << "\nAdmin Menu:" << endl;
         cout << "1. Add Flight" << endl;
         cout << "2. Remove Flight" << endl;
@@ -478,13 +478,20 @@ void adminMenu() {
 
                 string airline, departure, arrival, dateTime;
                 cout << "\nEnter Airline: ";
+                cin.ignore();
                 getline(cin, airline);
+                
                 cout << "Enter Departure Airport: ";
                 getline(cin, departure);
+                
                 cout << "Enter Arrival Airport: ";
                 getline(cin, arrival);
+                
+                
                 cout << "Enter Date and Time (DD-MM-YYYY HH:MM): ";
                 getline(cin, dateTime);
+                
+
 
                 flightFile << airline << ",\t" << departure << " -> " << arrival << ",\t" << dateTime << endl;
                 cout << "Flight added successfully!" << endl;
@@ -503,9 +510,11 @@ void adminMenu() {
                 if (!tempFile) {
                     throw runtime_error("Unable to create temporary file.");
                 }
+                
+                displayFlights();
 
                 string line, flightToRemove;
-                cout << "\nEnter details of the flight to remove (exact match required): ";
+                cout << "\nEnter details of the flight to remove: ";
                 cin.ignore();
                 getline(cin, flightToRemove);
 
@@ -551,7 +560,10 @@ void adminMenu() {
                 break;
             }
             case 4:
+            	system("cls");
                 return;
+                
+                
             default:
                 cout << "Invalid choice! Please try again." << endl;
         }
