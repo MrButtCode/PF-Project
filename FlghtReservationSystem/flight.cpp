@@ -62,7 +62,7 @@ bool bookSeat(char seats[][10], int rows, int cols, const string &className, int
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className);
 void displayFlights();
 void admin();
-string generateBookingID(); // Declare generateBookingID
+string generateBookingID(); 
 
 
 
@@ -137,7 +137,7 @@ int main(){
 
                     if (flightIndex > numFlights) {
                     	
-                        cout << "\n\tInvalid flight index. There are only " << numFlights << " flight(s) available." << endl; // Use cout
+                        cout << "\n\tInvalid flight index. There are only " << numFlights << " flight(s) available." << endl;
                         cout << "\n\t\t\t\t\tPress any key to continue...";
                         getch();
                         system("cls");
@@ -187,7 +187,7 @@ int main(){
                     cout << "\nEnter the Flight Number you want to book (enter index): ";
                     cin >> flightIndex;
 
-                    if (cin.fail() || flightIndex <= 0) {
+                    if(cin.fail() || flightIndex <= 0) {
                         throw runtime_error("Invalid flight index input.");
                     }
                     
@@ -303,11 +303,11 @@ bool bookSeat(char seats[][10], int rows, int cols, const string& className, int
     cout << "\nEnter the row (1-" << rows << ") and column (1-" << cols << ") to book: ";
     cin >> row >> col;
 
-    if (row <= 0 || row > rows || col <= 0 || col > cols) {
+    if(row <= 0 || row > rows || col <= 0 || col > cols) {
         throw out_of_range("Invalid seat selection. Row and column must be within valid range.");
     }
 
-    if (seats[row - 1][col - 1] == 'X'){
+    if(seats[row - 1][col - 1] == 'X'){
         throw runtime_error("Seat already booked! Please choose another seat.");
     }
 
@@ -364,7 +364,7 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     ofstream tempFile("temp.txt");
     
 
-    if (!bookingFile || !tempFile) {
+    if(!bookingFile || !tempFile) {
         cout << "Error accessing booking file!" << endl;
         return false;
     }
@@ -383,7 +383,7 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
         getline(ss, bookedClass, ',');
         ss >> flightIndexToCancel >> bookedRow >> bookedCol;
 
-        if (id == bookingID && bookedName == name && bookedCNIC == cnic && bookedClass == className && bookedFlightIndex == flightIndexToCancel){
+        if(id == bookingID && bookedName == name && bookedCNIC == cnic && bookedClass == className && bookedFlightIndex == flightIndexToCancel){
             bookingFound = true;
             if(className == bookedClass) {
                 seats[bookedRow - 1][bookedCol - 1] = 'O'; // Mark seat as available
@@ -401,11 +401,11 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
     bookingFile.close();
     tempFile.close();
 
-    if (bookingFound) {
+    if(bookingFound){
         remove("bookings.txt");
         rename("temp.txt", "bookings.txt");
     } 
-	else {
+	else{
         remove("temp.txt");
         cout << "Booking not found or details incorrect!" << endl;
     }
@@ -420,7 +420,7 @@ bool cancelSeat(char seats[][10], int rows, int cols, const string &className) {
 // Display flight schedules	
 void displayFlights(){
     ifstream flightFile("flights.txt");
-    if (!flightFile) {
+    if(!flightFile) {
         throw runtime_error("Unable to open flights file.");
     }
 
@@ -443,7 +443,7 @@ void displayFlights(){
 
 
 // Admin menu to view bookings
-void admin() {
+void admin(){
     const string ADMIN_USERNAME = "admin123";
     const string ADMIN_PASSWORD = "password456";
 
@@ -453,7 +453,7 @@ void admin() {
     cout << "Enter admin password: ";
     cin >> password;
 
-    if (username != ADMIN_USERNAME || password != ADMIN_PASSWORD) {
+    if(username != ADMIN_USERNAME || password != ADMIN_PASSWORD) {
         cout << "\nInvalid credentials! Returning to main menu." << endl;
         return;
     }
@@ -468,8 +468,8 @@ void admin() {
         cout << "\nEnter your choice (1-4): ";
         cin >> adminChoice;
 
-        switch (adminChoice) {
-            case 1: {
+        switch(adminChoice){
+            case 1:{
             	    // Add a new flight
                 ofstream flightFile("flights.txt", ios::app);
                 if(!flightFile) {
@@ -499,15 +499,15 @@ void admin() {
                 flightFile.close();
                 break;
             }
-            case 2: {
+            case 2:{
                 // Remove a flight
                 ifstream flightFile("flights.txt");
-                if (!flightFile) {
+                if(!flightFile) {
                     throw runtime_error("Unable to create temporary file.");
                 }
 
                 ofstream tempFile("temp.txt");
-                if (!tempFile) {
+                if(!tempFile) {
                     throw runtime_error("Unable to create temporary file.");
                 }
                 
@@ -532,11 +532,12 @@ void admin() {
                 flightFile.close();
                 tempFile.close();
 
-                if(found) {
+                if(found){
                     remove("flights.txt");
                     rename("temp.txt", "flights.txt");
                     cout << "Flight removed successfully!" << endl;
-                } else {
+                } 
+				else{
                     remove("temp.txt");
                     cout << "Flight not found!" << endl;
                 }
