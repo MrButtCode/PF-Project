@@ -1,12 +1,12 @@
 #include <iostream>
 #include <iomanip>
-#include<conio.h>  // For getch()
+#include<conio.h>  
 #include <fstream>
-#include<windows.h>  // For system("cls") and Sleep()
+#include<windows.h>
 #include <string>
-#include <ctime>  // For generating unique booking IDs
-#include <sstream> // For converting data to strings
-#include <stdexcept> // Include for exceptions
+#include <ctime>  
+#include <sstream> 
+#include <stdexcept> 
 using namespace std;
 
 
