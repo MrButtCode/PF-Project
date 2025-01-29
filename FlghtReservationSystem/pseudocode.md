@@ -88,7 +88,7 @@ cancelFlight():
 adminMenu():
 
     Prompt for admin username and password
-       (username: admin123, password: password456)
+        (username: admin123, password: password456)
        
     IF credentials are invalid
         Display error and return
