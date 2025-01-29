@@ -56,7 +56,7 @@ const int ECONOMY_ROWS = 10, ECONOMY_COLS = 6;
 
 
 // Function declarations
-void seats(char seats[][5], int rows, int cols);
+void seats(char seats[][10], int rows, int cols);
 void displaySeats(char seats[][10], int rows, int cols, const string &className, int aislePos1, int aislePos2);
 bool bookSeat(char seats[][10], int rows, int cols, const string &className, int flightIndex);
 bool cancelSeat(char seats[][10], int rows, int cols, const string &className);
@@ -73,9 +73,9 @@ int main(){
 	system("color 71");
 	
     // Seats for each class
-    char firstClassSeats[FIRST_ROWS][];    
-    char businessClassSeats[BUSINESS_ROWS][];
-    char economyClassSeats[ECONOMY_ROWS][]; 
+    char firstClassSeats[FIRST_ROWS][10];    
+    char businessClassSeats[BUSINESS_ROWS][10];
+    char economyClassSeats[ECONOMY_ROWS][10];  
     
 	login();
 	system("cls");
@@ -263,7 +263,7 @@ int main(){
 }
 
 // Initialize seats to 'O' (available)
-void seats(char seats[][], int rows, int cols) {
+void seats(char seats[][10], int rows, int cols) {
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
             seats[i][j] = 'O';
