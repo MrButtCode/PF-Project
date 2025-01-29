@@ -121,7 +121,7 @@ int main(){
                 	displayFlights();
                 	
                 	int flightIndex;
-                    cout << "\nEnter the Flight Number you want to book (enter index): ";
+                    cout << "\nEnter the Flight Number you want to book(enter index): ";
                     cin >> flightIndex;
 
                     if (cin.fail() || flightIndex <= 0) {
@@ -184,7 +184,7 @@ int main(){
                 displayFlights();
                 
                 int flightIndex;
-                    cout << "\nEnter the Flight Number you want to book (enter index): ";
+                    cout << "\nEnter the Flight Number you want to Cancel(enter index): ";
                     cin >> flightIndex;
 
                     if(cin.fail() || flightIndex <= 0) {
